@@ -22,3 +22,12 @@ class CanEditSomeTime(BasePermission):
         passed_time = now() - obj.updated_at
         return passed_time >= timedelta(minutes=1)
 
+class IsModerator(BasePermission):
+    def has_permission(self, request, view):
+        if not (request.user and request.user.is_authenticated and request.user.is_staff):
+            return False
+
+        if request.method == 'POST':
+            return False
+
+        return True
